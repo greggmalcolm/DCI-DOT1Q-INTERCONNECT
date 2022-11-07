@@ -1,0 +1,19 @@
+custom_structured_configuration_router_bgp:
+  as: 65103
+  peer_groups: 
+    DCI-OVERLAY-PEERS:
+      type: evpn
+      update_source: Loopback0
+      bfd: true
+      ebgp_multihop: 3
+      send_community: all
+      maximum_routes: 0
+  neighbors: 
+    198.18.0.7:
+      peer_group: DCI-OVERLAY-PEERS
+      remote_as: 65003
+      description: SJ-DCI1
+  address_family_evpn:
+    peer_groups:
+      DCI-OVERLAY-PEERS:
+        activate: true

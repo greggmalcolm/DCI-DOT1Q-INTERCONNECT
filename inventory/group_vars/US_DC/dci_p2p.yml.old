@@ -1,0 +1,40 @@
+l3_edge:
+  p2p_links_ip_pools:
+    SJ-DCI1: 198.18.249.242/31
+    SJ-DCI2: 198.18.249.244/31
+    AS-DCI1: 198.18.249.246/31
+    AS-DCI2: 198.18.249.248/31
+
+  p2p_links:
+    - id: 1
+      ip_pool: SJ-DCI1
+      subnet: 198.18.249.242/31
+      nodes: [SJ-BL1, SJ-DCI1]
+      interfaces: [Ethernet5, Ethernet5]
+      as: [65003, 65099]
+      include_in_underlay_protocol: true 
+    
+    - id: 2
+      ip_pool: SJ-DCI2
+      subnet: 198.18.249.244/31
+      nodes: [SJ-DCI2, AS-DCI2]
+      interfaces: [Ethernet5, Ethernet5]
+      as: [65003, 65099]
+      include_in_underlay_protocol: true 
+
+    - id: 3
+      ip_pool: AS-DCI1
+      subnet: 198.18.249.246/31
+      nodes: [AS-BL1, AS-DCI1]
+      interfaces: [Ethernet5, Ethernet5]
+      as: [65103, 65199]
+      include_in_underlay_protocol: true 
+  
+    - id: 4
+      ip_pool: AS-DCI2
+      subnet: 198.18.249.248/31
+      nodes: [AS-BL2, AS-DCI2]
+      interfaces: [Ethernet5, Ethernet5]
+      as: [65103, 65199]
+      include_in_underlay_protocol: true 
+  

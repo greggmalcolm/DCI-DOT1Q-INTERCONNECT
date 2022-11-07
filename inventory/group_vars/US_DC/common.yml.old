@@ -1,0 +1,193 @@
+---
+# Validation lab
+# local users
+local_users:
+  admin:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$pwmzPZqxql2yZ.ge$Cx7b5gTa9C7go/skTK0W88zdkBxFBuAmsol.TkWcnGlpRQohUMxzzHQmIzyZ/5M8T33.qSZMFPsgMgmTzM6r01"
+
+  cvpadmin:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$lhcX5i6a7cVCvwux$n4KM19WOV6cFG0QumteDf9A3SA.GmBJidlSuHfWd/x9KB2yEVjynw8Kr10KJFQ0eeBgBGONpdT1HzP1uGjg3C."
+
+  ansible:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$K0SFGHUNW.al69Yo$///VGqkYDYDpUjXKFkSWa5.WVnANiBPD8d/An/HP2I/IOd6AYSXJ9VL6FrjYrwp/SLsqwZLB7KV4hB9HGAyKv."
+
+# Cloud Vision server information
+cvp_instance_ip: 198.18.99.90
+cvp_ingestauth_key: ''
+
+# VRFs
+vrfs:
+  MGMT:
+    description: Management
+    ip_routing: false
+
+# dns servers
+name_server:
+  source:
+      vrf: MGMT
+  nodes:
+    - 198.18.100.160
+ip_domain_lookup:
+  source_interfaces:
+    Management1:
+      vrf: MGMT
+dns_domain: netdevenv.net
+
+# NTP Servers 
+ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+    - name: 129.6.15.28
+      preferred: true 
+      vrf: MGMT
+    - name: 129.6.15.29
+      vrf: MGMT
+    - name: 132.163.97.4
+      vrf: MGMT
+  authenticate: false 
+
+standard_access_lists:
+  MGMT_ACL:
+    counters_per_entry: false 
+    sequence_numbers:
+      10:
+        action: "permit 198.18.0.0/16"
+
+  SNMP_ACL:
+    counters_per_entry: false 
+    sequence_numbers:
+      10:
+        action: "permit host 198.18.100.150"
+
+#logging
+logging:
+  console: "critical" 
+  monitor: "notifications" 
+  buffered:
+    size: 1000
+    level: "debugging" 
+  source_interface: Management1
+  vrfs:
+    MGMT:
+      source_interface: Management1
+      hosts:
+        198.18.100.150:
+
+# TACACS
+tacacs_servers:
+  hosts:
+    - host: 198.18.100.150
+      vrf: MGMT
+      key:  !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          38623238346265353864666463666563636335323439656531636265376565303062646438316334
+          3761323334333834666161643233386263663430303266380a626234353965323536663364633034
+          35303931353639316532396337313434663235666532303765633061346437306662663230653737
+          6463326633646566350a613439633061666531313164326536343639323136623034663731653661
+          3536
+      key_type: 7
+      timeout: 10 
+    
+# AAA      
+aaa_server_groups:
+  - name: TACACS_GROUP 
+    type: tacacs+ 
+    servers:
+      - server: 198.18.100.150
+        vrf: MGMT
+
+aaa_authentication:
+  login:
+    default: local 
+    console: local
+
+
+# mgmt
+management_ssh:
+  vrfs:
+    MGMT:
+      enable: true
+
+# SNMP
+snmp_server:
+  contact: Al Catraz
+  location: SJ
+  ipv4_acls:
+    - name: SNMP_ACL
+      vrf: MGMT
+  local_interfaces:
+    Management1:
+      vrf: MGMT
+  views:
+    - name: VIEW_ALL
+      MIB_family_name: ISO
+      included: true 
+  groups:
+    - name: SNMPV3_RO
+      version: v3 
+      authentication: priv 
+      read: VIEW_ALL
+  users:
+    - name: V3USER
+      group: SNMPV3_RO
+      version: v3 
+      auth: MD5
+      auth_passphrase: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          36323163646432663963393235623461653336376432366666636630643064623363373036663532
+          3530363334343337666536656661363331356533386339340a333735333239356661393331363432
+          37306630643866366364313263326461323562316561653833656639386464383763663261303834
+          6465313539636331360a646536653734356561666333383738643830653564303232343739316433
+          6232
+      priv: aes
+      priv_passphrase:  !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          62633463306666643930353534393232646264386438356632303937653361373366326365623637
+          6362323462616330643739643135666565383432343333660a633539363333366161646333316536
+          39623835653262366537653664313663613163373162653762623737623539383534656232316635
+          6262623433353063340a363234396636616362616237636638336431303266356362313133356261
+          6163
+  hosts:
+    - host: 198.18.100.150
+      vrf: MGMT
+      version: 2c 
+      community: public
+      users:
+        - username: V3USER
+          authentication_level: priv 
+  traps:
+    snmp_traps:
+      - name: bgp
+      - name: entity arista-ent-sensor-alarm
+      - name: external-alarm arista-external-alarm-deasserted-notif     
+      - name: snmp link-down
+      - name: snmp link-up
+  vrfs:
+    - name: MGMT
+      enable: true 
+
+# banners
+banners:
+  motd: |
+    ######################################
+    ###                                ###
+    ###  NetDevEnv L3LS Network        ###
+    ###     Dual DC with DCI           ###
+    ###                                ###
+    ######################################
+    EOF
+
+aliases: |
+  alias CVP ping vrf MGMT 198.18.99.90
+  alias M99 ping vrf MGMT 198.18.99.1
+  alias M98 ping vrf MGMT 198.18.98.1
+  alias MAC sh bgp evpn route-type mac-ip
+  alias PRE sh bgp evpn route-type ip-prefix ipv4

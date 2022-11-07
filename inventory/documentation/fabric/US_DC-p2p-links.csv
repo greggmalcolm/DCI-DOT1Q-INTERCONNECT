@@ -1,0 +1,25 @@
+Type,Node,Node Interface,Leaf IP Address,Peer Type,Peer Node,Peer Interface,Peer IP Address
+l3leaf,AS-BL1,Ethernet1,198.18.201.25/31,spine,AS-SPINE1,Ethernet5,198.18.201.24/31
+l3leaf,AS-BL1,Ethernet2,198.18.201.27/31,spine,AS-SPINE2,Ethernet5,198.18.201.26/31
+l3leaf,AS-BL2,Ethernet1,198.18.201.29/31,spine,AS-SPINE1,Ethernet6,198.18.201.28/31
+l3leaf,AS-BL2,Ethernet2,198.18.201.31/31,spine,AS-SPINE2,Ethernet6,198.18.201.30/31
+l3leaf,AS-LEAF1,Ethernet1,198.18.201.9/31,spine,AS-SPINE1,Ethernet1,198.18.201.8/31
+l3leaf,AS-LEAF1,Ethernet2,198.18.201.11/31,spine,AS-SPINE2,Ethernet1,198.18.201.10/31
+l3leaf,AS-LEAF2,Ethernet1,198.18.201.13/31,spine,AS-SPINE1,Ethernet2,198.18.201.12/31
+l3leaf,AS-LEAF2,Ethernet2,198.18.201.15/31,spine,AS-SPINE2,Ethernet2,198.18.201.14/31
+l3leaf,AS-LEAF3,Ethernet1,198.18.201.17/31,spine,AS-SPINE1,Ethernet3,198.18.201.16/31
+l3leaf,AS-LEAF3,Ethernet2,198.18.201.19/31,spine,AS-SPINE2,Ethernet3,198.18.201.18/31
+l3leaf,AS-LEAF4,Ethernet1,198.18.201.21/31,spine,AS-SPINE1,Ethernet4,198.18.201.20/31
+l3leaf,AS-LEAF4,Ethernet2,198.18.201.23/31,spine,AS-SPINE2,Ethernet4,198.18.201.22/31
+l3leaf,SJ-BL1,Ethernet1,198.18.200.25/31,spine,SJ-SPINE1,Ethernet5,198.18.200.24/31
+l3leaf,SJ-BL1,Ethernet2,198.18.200.27/31,spine,SJ-SPINE2,Ethernet5,198.18.200.26/31
+l3leaf,SJ-BL2,Ethernet1,198.18.200.29/31,spine,SJ-SPINE1,Ethernet6,198.18.200.28/31
+l3leaf,SJ-BL2,Ethernet2,198.18.200.31/31,spine,SJ-SPINE2,Ethernet6,198.18.200.30/31
+l3leaf,SJ-LEAF1,Ethernet1,198.18.200.9/31,spine,SJ-SPINE1,Ethernet1,198.18.200.8/31
+l3leaf,SJ-LEAF1,Ethernet2,198.18.200.11/31,spine,SJ-SPINE2,Ethernet1,198.18.200.10/31
+l3leaf,SJ-LEAF2,Ethernet1,198.18.200.13/31,spine,SJ-SPINE1,Ethernet2,198.18.200.12/31
+l3leaf,SJ-LEAF2,Ethernet2,198.18.200.15/31,spine,SJ-SPINE2,Ethernet2,198.18.200.14/31
+l3leaf,SJ-LEAF3,Ethernet1,198.18.200.17/31,spine,SJ-SPINE1,Ethernet3,198.18.200.16/31
+l3leaf,SJ-LEAF3,Ethernet2,198.18.200.19/31,spine,SJ-SPINE2,Ethernet3,198.18.200.18/31
+l3leaf,SJ-LEAF4,Ethernet1,198.18.200.21/31,spine,SJ-SPINE1,Ethernet4,198.18.200.20/31
+l3leaf,SJ-LEAF4,Ethernet2,198.18.200.23/31,spine,SJ-SPINE2,Ethernet4,198.18.200.22/31

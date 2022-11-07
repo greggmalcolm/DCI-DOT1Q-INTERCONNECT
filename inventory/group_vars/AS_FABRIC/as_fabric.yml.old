@@ -1,0 +1,134 @@
+---
+# L3LS Fabric Values - update these values with caution,
+# SOME CHANGES COULD BE DISRUPTIVE.
+
+fabric_name: US_DC
+
+dc_name: AS_FABRIC
+
+# Enable vlan aware bundles
+vxlan_vlan_aware_bundles: false
+
+# bgp peer groups passwords
+bgp_peer_groups:
+  IPv4_UNDERLAY_PEERS:
+    password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          33626665663164643264353061656332623536306263316466366531383234343832366662356666
+          3734303164306465396465656463346538643066303430390a393962363239656237646161643863
+          66333065346538316562353164616334343139373230386362323464306164616165616166323932
+          3836353039383731610a316363646635393166626361373539316537373230386338376561333463
+          32363661313931633839356161363433326361663965616639623431353330616139
+  EVPN_OVERLAY_PEERS:
+    password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          31343065323561303834313066663863383866323830316564396261626339636137613032313162
+          3565306135376364666665363230663339643335616633320a306132343739643539376236343134
+          31303961306364666234316138396666363462663439306434313938333661363362343865393965
+          3636396364653631640a363063343939313137313337393132376664646639633134633864313064
+          62343537343935326134666134303337303063656435343235623130613538373339
+  MLAG_IPv4_UNDERLAY_PEER:
+    password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          33363633346630346432343233326662303732343136366565386536333530343733343365666139
+          3839623332323663633763316361343930336132366435630a643762313934623534666164656433
+          31353632363135346239383739356662356136383162363665373637393035653333383362613065
+          6538623339323739330a313965613066383037663637663261663737623364376237613165653861
+          63623135303935653262633730323139303833646339373266343338636238306162
+
+# Spine Switches
+spine:
+  defaults:
+    platform: vEOS-LAB
+    bgp_as: 65100
+    loopback_ipv4_pool: 198.18.10.0/24
+    bgp_defaults:
+      - 'no bgp default ipv4-unicast'
+      - 'distance bgp 20 200 200'
+      - 'graceful-restart restart-time 300'
+      - 'graceful-restart'
+    mlag_peer_ipv4_pool: 10.255.254.0/24
+    mlag_peer_l3_ipv4_pool: 10.255.253.0/24
+  nodes:
+    AS-SPINE1:
+      id: 1
+      mgmt_ip: 198.18.98.101/24
+    AS-SPINE2:
+      id: 2
+      mgmt_ip: 198.18.98.102/24
+
+# Leaf switch groups
+# A maximum of two nodes can form a leaf group
+# When two nodes are in a leaf group this will automatically form mlag pair
+
+l3leaf:
+  defaults:
+    platform: vEOS-LAB
+    loopback_ipv4_pool: 198.18.10.0/24
+    loopback_ipv4_offset: 2
+    vtep_loopback_ipv4_pool: 198.18.11.0/24
+    uplink_interfaces: ['Ethernet1', 'Ethernet2']
+    uplink_switches: ['AS-SPINE1', 'AS-SPINE2']
+    uplink_ipv4_pool: 198.18.201.0/24
+    mlag_interfaces: [ Ethernet3, Ethernet4 ]
+    mlag_peer_ipv4_pool: 10.255.252.0/24
+    mlag_peer_l3_ipv4_pool: 10.255.251.0/24
+    virtual_router_mac_address: 00:1c:73:00:dc:01
+    bgp_defaults:
+      - 'no bgp default ipv4-unicast'
+      - 'distance bgp 20 200 200'
+      - 'graceful-restart restart-time 300'
+      - 'graceful-restart'
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 16384
+  node_groups:
+    AS_LEAF1_2:
+      bgp_as: 65101
+      nodes:
+        AS-LEAF1:
+          id: 3
+          mgmt_ip: 198.18.98.103/24
+          uplink_switch_interfaces: [Ethernet1, Ethernet1]
+        AS-LEAF2:
+          id: 4
+          mgmt_ip: 198.18.98.104/24
+          uplink_switch_interfaces: [Ethernet2, Ethernet2]
+    AS_DCI1_2:
+      bgp_as: 65102
+      nodes:
+        AS-DCI1:
+          id: 5
+          mgmt_ip: 198.18.98.107/24
+          uplink_switch_interfaces: [Ethernet3, Ethernet3]
+        AS-DCI2:
+          id: 6
+          mgmt_ip: 198.18.98.108/24
+          uplink_switch_interfaces: [Ethernet4, Ethernet4]    
+    AS_LEAF3_4:
+      bgp_as: 65103
+      nodes:
+        AS-LEAF3:
+          id: 7
+          mgmt_ip: 198.18.98.105/24
+          uplink_switch_interfaces: [Ethernet5, Ethernet5]
+        AS-LEAF4:
+          id: 8
+          mgmt_ip: 198.18.98.106/24
+          uplink_switch_interfaces: [Ethernet6, Ethernet6]    
+
+
+#### Override for AVD-VEOS Lab Caveats ####
+
+# Disable update wait-for-convergence and update wait-for-install,
+# which is not supported in AVD-VEOS-LAB.
+# Refer to design guide
+
+# Update p2p mtu 9000 -> 1500
+p2p_uplinks_mtu: 1500
+
+# Adjust default bfd values
+bfd_multihop:
+  interval: 3600
+  min_rx: 3600
+  multiplier: 5
+

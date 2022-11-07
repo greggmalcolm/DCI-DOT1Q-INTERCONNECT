@@ -1,0 +1,101 @@
+---
+CVP_DEVICES:
+  - fqdn: AS-BL1
+    parentContainerName: AS_BL1_2
+    configlets:
+      - US_DC_CONFIGLET_AS-BL1
+  - fqdn: AS-BL2
+    parentContainerName: AS_BL1_2
+    configlets:
+      - US_DC_CONFIGLET_AS-BL2
+  - fqdn: AS-LEAF1
+    parentContainerName: AS_LEAF1_2
+    configlets:
+      - US_DC_CONFIGLET_AS-LEAF1
+  - fqdn: AS-LEAF2
+    parentContainerName: AS_LEAF1_2
+    configlets:
+      - US_DC_CONFIGLET_AS-LEAF2
+  - fqdn: AS-LEAF3
+    parentContainerName: AS_LEAF3_4
+    configlets:
+      - US_DC_CONFIGLET_AS-LEAF3
+  - fqdn: AS-LEAF4
+    parentContainerName: AS_LEAF3_4
+    configlets:
+      - US_DC_CONFIGLET_AS-LEAF4
+  - fqdn: AS-SPINE1
+    parentContainerName: AS_SPINES
+    configlets:
+      - US_DC_CONFIGLET_AS-SPINE1
+  - fqdn: AS-SPINE2
+    parentContainerName: AS_SPINES
+    configlets:
+      - US_DC_CONFIGLET_AS-SPINE2
+  - fqdn: SJ-BL1
+    parentContainerName: SJ_BL12
+    configlets:
+      - US_DC_CONFIGLET_SJ-BL1
+  - fqdn: SJ-BL2
+    parentContainerName: SJ_BL12
+    configlets:
+      - US_DC_CONFIGLET_SJ-BL2
+  - fqdn: SJ-LEAF1
+    parentContainerName: SJ_LEAF1_2
+    configlets:
+      - US_DC_CONFIGLET_SJ-LEAF1
+  - fqdn: SJ-LEAF2
+    parentContainerName: SJ_LEAF1_2
+    configlets:
+      - US_DC_CONFIGLET_SJ-LEAF2
+  - fqdn: SJ-LEAF3
+    parentContainerName: SJ_LEAF3_4
+    configlets:
+      - US_DC_CONFIGLET_SJ-LEAF3
+  - fqdn: SJ-LEAF4
+    parentContainerName: SJ_LEAF3_4
+    configlets:
+      - US_DC_CONFIGLET_SJ-LEAF4
+  - fqdn: SJ-SPINE1
+    parentContainerName: SJ_SPINES
+    configlets:
+      - US_DC_CONFIGLET_SJ-SPINE1
+  - fqdn: SJ-SPINE2
+    parentContainerName: SJ_SPINES
+    configlets:
+      - US_DC_CONFIGLET_SJ-SPINE2
+CVP_CONTAINERS:
+  AS_BL1_2:
+    parentContainerName: AS_L3LEAFS
+  AS_ENDPOINTS:
+    parentContainerName: US_DC
+  AS_FABRIC:
+    parentContainerName: US_DC
+  AS_L3LEAFS:
+    parentContainerName: AS_FABRIC
+  AS_LEAF1_2:
+    parentContainerName: AS_L3LEAFS
+  AS_LEAF3_4:
+    parentContainerName: AS_L3LEAFS
+  AS_NETWORKS:
+    parentContainerName: US_DC
+  AS_SPINES:
+    parentContainerName: AS_FABRIC
+  SJ_BL12:
+    parentContainerName: SJ_L3LEAFS
+  SJ_ENDPOINTS:
+    parentContainerName: US_DC
+  SJ_FABRIC:
+    parentContainerName: US_DC
+  SJ_L3LEAFS:
+    parentContainerName: SJ_FABRIC
+  SJ_LEAF1_2:
+    parentContainerName: SJ_L3LEAFS
+  SJ_LEAF3_4:
+    parentContainerName: SJ_L3LEAFS
+  SJ_NETWORKS:
+    parentContainerName: US_DC
+  SJ_SPINES:
+    parentContainerName: SJ_FABRIC
+  US_DC:
+    parentContainerName: Tenant

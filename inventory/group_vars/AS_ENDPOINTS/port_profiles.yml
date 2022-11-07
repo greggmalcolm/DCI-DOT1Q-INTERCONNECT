@@ -1,0 +1,28 @@
+---
+
+port_profiles:
+  SERVER_TRUNK:
+    mode: trunk
+    vlans: "1-1023"
+  DCI_TRUNK:
+    mode: trunk
+    vlans: "1-1023"
+  AS_PROD_110:
+    mode: access
+    vlans: "110"
+  AS_DEV_120:
+    mode: access
+    vlans: "120"
+  SHARED_L2_210:
+    mode: access
+    vlans: "210"
+  SHARED_L2_220:
+    mode: access
+    vlans: "220"
+  SHARED_PROD_L3_230:
+    mode: access
+    vlans: "230"
+  SHARED_PROD_L3_240:
+    mode: access
+    vlans: "240"
+

@@ -1,0 +1,43 @@
+---  
+ 
+servers: 
+  endpoint35:
+    adapters:
+      - endpoint_ports: [Eth0/1]
+        switch_ports: [Ethernet6]
+        switches: [AS-LEAF1]
+        spanning_tree_portfast: edge
+        profile: SERVER_TRUNK
+ 
+  endpoint36:
+    adapters:
+      - endpoint_ports: [Eth0/1]
+        switch_ports: [Ethernet6]
+        switches: [AS-LEAF2]
+        spanning_tree_portfast: edge
+        profile: SERVER_TRUNK
+
+  endpoint37:
+    adapters:
+      - endpoint_ports: [Eth0/1]
+        switch_ports: [Ethernet6]
+        switches: [AS-LEAF3]
+        spanning_tree_portfast: edge
+        profile: SERVER_TRUNK
+ 
+  endpoint38:
+    adapters:
+      - endpoint_ports: [Eth0/1]
+        switch_ports: [Ethernet6]
+        switches: [AS-LEAF4]
+        spanning_tree_portfast: edge
+        profile: SERVER_TRUNK
+
+network_ports:
+  - switches:
+      - AS-BL.
+    switch_ports:
+      - Ethernet5
+    vlans: 210-240
+    description: To DCI Switches
+    profile: DCI_TRUNK

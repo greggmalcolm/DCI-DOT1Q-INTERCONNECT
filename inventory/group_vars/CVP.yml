@@ -1,0 +1,105 @@
+---
+ztp:
+  default:
+    registration: 'http://198.18.250.50/ztp/bootstrap'
+    gateway: 198.18.250.1
+    nameservers:
+      - '198.18.250.25'
+
+  general:
+    subnets:
+      - network: 198.18.250.0
+        netmask: 255.255.255.0
+        gateway: 198.18.250.1
+        nameservers:
+          - '198.18.250.25'
+        start: 198.18.250.101
+        end: 198.18.250.119
+        lease_time: 86400
+      - network: 198.18.251.0
+        netmask: 255.255.255.0
+        gateway: 198.18.251.1
+        nameservers:
+          - '198.18.250.25'
+        start: 198.18.251.101
+        end: 198.18.251.119
+        lease_time: 86400
+      - network: 198.18.252.0
+        netmask: 255.255.255.0
+        gateway: 198.18.252.1
+        nameservers:
+          - '198.18.250.25'
+        start: 198.18.252.101
+        end: 198.18.252.119
+        lease_time: 86400
+
+  clients:
+    # AVD/CVP Integration
+    - name: SJ-SPINE1
+      mac: '50:00:10:00:00:01'
+      ip4: 198.18.251.101
+      gateway: 198.18.251.1
+    - name: SJ-SPINE2
+      mac: '50:00:10:00:00:02'
+      ip4: 198.18.251.102
+      gateway: 198.18.251.1
+    - name: SJ-LEAF1
+      mac: '50:00:10:00:00:03'
+      ip4: 198.18.251.103
+      gateway: 198.18.251.1
+    - name: SJ-LEAF2
+      mac: '50:00:10:00:00:04'
+      ip4: 198.18.251.104
+      gateway: 198.18.251.1
+    - name: SJ-LEAF3
+      mac: '50:00:10:00:00:05'
+      ip4: 198.18.251.105
+      gateway: 198.18.251.1
+    - name: SJ-LEAF4
+      mac: '50:00:10:00:00:06'
+      ip4: 198.18.251.106
+      gateway: 198.18.251.1
+    - name: SJ-BL1
+      mac: '50:00:10:00:00:07'
+      ip4: 198.18.251.107
+      gateway: 198.18.251.1
+    - name: SJ-BL2
+      mac: '50:00:10:00:00:08'
+      ip4: 198.18.251.108
+      gateway: 198.18.251.1
+    - name: AS-SPINE1
+      mac: '50:00:20:00:00:01'
+      ip4: 198.18.252.101
+      gateway: 198.18.252.1
+    - name: AS-SPINE2
+      mac: '50:00:20:00:00:02'
+      ip4: 198.18.252.102
+      gateway: 198.18.252.1
+    - name: AS-LEAF1
+      mac: '50:00:20:00:00:03'
+      ip4: 198.18.252.103
+      gateway: 198.18.252.1
+    - name: AS-LEAF2
+      mac: '50:00:20:00:00:04'
+      ip4: 198.18.252.104
+      gateway: 198.18.252.1
+    - name: AS-LEAF3
+      mac: '50:00:20:00:00:05'
+      ip4: 198.18.252.105
+      gateway: 198.18.252.1
+    - name: AS-LEAF4
+      mac: '50:00:20:00:00:06'
+      ip4: 198.18.252.106
+      gateway: 198.18.252.1
+    - name: AS-BL1
+      mac: '50:00:20:00:00:07'
+      ip4: 198.18.252.107
+      gateway: 198.18.252.1
+    - name: AS-BL2
+      mac: '50:00:20:00:00:08'
+      ip4: 198.18.252.108
+      gateway: 198.18.252.1
+
+
+
+

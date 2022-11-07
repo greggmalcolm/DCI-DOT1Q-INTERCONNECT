@@ -1,0 +1,214 @@
+router_bgp:
+  as: '65000'
+  router_id: 198.18.0.1
+  bgp_defaults:
+  - no bgp default ipv4-unicast
+  - distance bgp 20 200 200
+  - graceful-restart restart-time 300
+  - graceful-restart
+  - maximum-paths 4 ecmp 4
+  peer_groups:
+    IPv4-UNDERLAY-PEERS:
+      type: ipv4
+      password: M8vWRvXxZeG0yFTKwRv6/w==
+      maximum_routes: 12000
+      send_community: all
+    EVPN-OVERLAY-PEERS:
+      type: evpn
+      update_source: Loopback0
+      bfd: true
+      ebgp_multihop: '3'
+      password: y0odJjxTRYe9KE/ANGdmzQ==
+      send_community: all
+      maximum_routes: 0
+      next_hop_unchanged: true
+  address_family_ipv4:
+    peer_groups:
+      IPv4-UNDERLAY-PEERS:
+        activate: true
+      EVPN-OVERLAY-PEERS:
+        activate: false
+  redistribute_routes:
+    connected:
+      route_map: RM-CONN-2-BGP
+  neighbors:
+    198.18.200.9:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65001'
+      description: SJ-LEAF1_Ethernet1
+    198.18.200.13:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65001'
+      description: SJ-LEAF2_Ethernet1
+    198.18.200.17:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65002'
+      description: SJ-LEAF3_Ethernet1
+    198.18.200.21:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65002'
+      description: SJ-LEAF4_Ethernet1
+    198.18.200.25:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65003'
+      description: SJ-BL1_Ethernet1
+    198.18.200.29:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65003'
+      description: SJ-BL2_Ethernet1
+    198.18.0.9:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: SJ-BL1
+      remote_as: '65003'
+    198.18.0.10:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: SJ-BL2
+      remote_as: '65003'
+    198.18.0.5:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: SJ-LEAF1
+      remote_as: '65001'
+    198.18.0.6:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: SJ-LEAF2
+      remote_as: '65001'
+    198.18.0.7:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: SJ-LEAF3
+      remote_as: '65002'
+    198.18.0.8:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: SJ-LEAF4
+      remote_as: '65002'
+  address_family_evpn:
+    peer_groups:
+      EVPN-OVERLAY-PEERS:
+        activate: true
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 198.18.251.1
+service_routing_protocols_model: multi-agent
+ip_routing: true
+daemon_terminattr:
+  cvaddrs:
+  - 198.18.250.50:9910
+  cvauth:
+    method: key
+    key: ''
+  cvvrf: MGMT
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+spanning_tree:
+  mode: none
+local_users:
+  admin:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$pwmzPZqxql2yZ.ge$Cx7b5gTa9C7go/skTK0W88zdkBxFBuAmsol.TkWcnGlpRQohUMxzzHQmIzyZ/5M8T33.qSZMFPsgMgmTzM6r01
+  ansible:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$K0SFGHUNW.al69Yo$///VGqkYDYDpUjXKFkSWa5.WVnANiBPD8d/An/HP2I/IOd6AYSXJ9VL6FrjYrwp/SLsqwZLB7KV4hB9HGAyKv.
+  cvpadmin:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$uiMt2qTKEpmpeAr/$/cRBvlG787Y4eSlcHy0seU2GqNVfuBV/g6zdcMm.Oiw4wvAI1AAGJkxzsamgfNv.bX2O.hmwJDtJ7X7kqArpL/
+vrfs:
+  MGMT:
+    ip_routing: false
+management_interfaces:
+  Management1:
+    description: oob_management
+    shutdown: false
+    vrf: MGMT
+    ip_address: 198.18.251.101/24
+    gateway: 198.18.251.1
+    type: oob
+management_api_http:
+  enable_vrfs:
+    MGMT: {}
+  enable_https: true
+ethernet_interfaces:
+  Ethernet1:
+    peer: SJ-LEAF1
+    peer_interface: Ethernet1
+    peer_type: l3leaf
+    description: P2P_LINK_TO_SJ-LEAF1_Ethernet1
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 198.18.200.8/31
+  Ethernet2:
+    peer: SJ-LEAF2
+    peer_interface: Ethernet1
+    peer_type: l3leaf
+    description: P2P_LINK_TO_SJ-LEAF2_Ethernet1
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 198.18.200.12/31
+  Ethernet3:
+    peer: SJ-LEAF3
+    peer_interface: Ethernet1
+    peer_type: l3leaf
+    description: P2P_LINK_TO_SJ-LEAF3_Ethernet1
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 198.18.200.16/31
+  Ethernet4:
+    peer: SJ-LEAF4
+    peer_interface: Ethernet1
+    peer_type: l3leaf
+    description: P2P_LINK_TO_SJ-LEAF4_Ethernet1
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 198.18.200.20/31
+  Ethernet5:
+    peer: SJ-BL1
+    peer_interface: Ethernet1
+    peer_type: l3leaf
+    description: P2P_LINK_TO_SJ-BL1_Ethernet1
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 198.18.200.24/31
+  Ethernet6:
+    peer: SJ-BL2
+    peer_interface: Ethernet1
+    peer_type: l3leaf
+    description: P2P_LINK_TO_SJ-BL2_Ethernet1
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 198.18.200.28/31
+loopback_interfaces:
+  Loopback0:
+    description: EVPN_Overlay_Peering
+    shutdown: false
+    ip_address: 198.18.0.1/32
+prefix_lists:
+  PL-LOOPBACKS-EVPN-OVERLAY:
+    sequence_numbers:
+      10:
+        action: permit 198.18.0.0/24 eq 32
+route_maps:
+  RM-CONN-2-BGP:
+    sequence_numbers:
+      10:
+        type: permit
+        match:
+        - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+router_bfd:
+  multihop:
+    interval: 3600
+    min_rx: 3600
+    multiplier: 5

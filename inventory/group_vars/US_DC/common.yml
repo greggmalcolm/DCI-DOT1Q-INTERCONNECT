@@ -1,0 +1,175 @@
+---
+# Validation lab
+# local users
+local_users:
+  admin:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$pwmzPZqxql2yZ.ge$Cx7b5gTa9C7go/skTK0W88zdkBxFBuAmsol.TkWcnGlpRQohUMxzzHQmIzyZ/5M8T33.qSZMFPsgMgmTzM6r01"
+
+  cvpadmin:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$uiMt2qTKEpmpeAr/$/cRBvlG787Y4eSlcHy0seU2GqNVfuBV/g6zdcMm.Oiw4wvAI1AAGJkxzsamgfNv.bX2O.hmwJDtJ7X7kqArpL/"
+
+  ansible:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$K0SFGHUNW.al69Yo$///VGqkYDYDpUjXKFkSWa5.WVnANiBPD8d/An/HP2I/IOd6AYSXJ9VL6FrjYrwp/SLsqwZLB7KV4hB9HGAyKv."
+
+# Cloud Vision server information
+cvp_instance_ip: 198.18.250.50
+cvp_ingestauth_key: ''
+
+# VRFs
+vrfs:
+  MGMT:
+    description: Management
+    ip_routing: false
+
+# dns servers
+name_server:
+  source:
+      vrf: MGMT
+  nodes:
+    - 198.18.250.25
+ip_domain_lookup:
+  source_interfaces:
+    Management1:
+      vrf: MGMT
+dns_domain: netdevenv.net
+
+# NTP Servers 
+ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+    - name: 129.6.15.28
+      preferred: true 
+      vrf: MGMT
+    - name: 129.6.15.29
+      vrf: MGMT
+    - name: 132.163.97.4
+      vrf: MGMT
+  authenticate: false 
+
+standard_access_lists:
+  MGMT_ACL:
+    counters_per_entry: false 
+    sequence_numbers:
+      10:
+        action: "permit 198.18.0.0/16"
+
+  SNMP_ACL:
+    counters_per_entry: false 
+    sequence_numbers:
+      10:
+        action: "permit host 198.18.100.150"
+
+#logging
+logging:
+  console: "critical" 
+  monitor: "notifications" 
+  buffered:
+    size: 1000
+    level: "debugging" 
+  source_interface: Management1
+  vrfs:
+    MGMT:
+      source_interface: Management1
+      hosts:
+        198.18.100.150:
+
+# TACACS
+tacacs_servers:
+  hosts:
+    - host: 198.18.100.150
+      vrf: MGMT
+      key: "143600021F102B78767972"
+      key_type: 7
+      timeout: 10 
+    
+# AAA      
+aaa_server_groups:
+  - name: TACACS_GROUP 
+    type: tacacs+ 
+    servers:
+      - server: 198.18.100.150
+        vrf: MGMT
+
+aaa_authentication:
+  login:
+    default: local 
+    console: local
+
+
+# mgmt
+management_ssh:
+  vrfs:
+    MGMT:
+      enable: true
+
+# SNMP
+snmp_server:
+  contact: Al Catraz
+  location: SJ
+  ipv4_acls:
+    - name: SNMP_ACL
+      vrf: MGMT
+  local_interfaces:
+    Management1:
+      vrf: MGMT
+  views:
+    - name: VIEW_ALL
+      MIB_family_name: ISO
+      included: true 
+  groups:
+    - name: SNMPV3_RO
+      version: v3 
+      authentication: priv 
+      read: VIEW_ALL
+  users:
+    - name: V3USER
+      group: SNMPV3_RO
+      version: v3 
+      auth: MD5
+      auth_passphrase: "6a9b9ccc040ea507b146c1cca2d0f29b"
+      priv: aes
+      priv_passphrase: "7bf10ea032f5e5dc6a68e331b0cca99f" 
+  hosts:
+    - host: 198.18.100.150
+      vrf: MGMT
+      version: 2c 
+      community: public
+      users:
+        - username: V3USER
+          authentication_level: priv 
+  traps:
+    snmp_traps:
+      - name: bgp
+      - name: entity arista-ent-sensor-alarm
+      - name: external-alarm arista-external-alarm-deasserted-notif     
+      - name: snmp link-down
+      - name: snmp link-up
+  vrfs:
+    - name: MGMT
+      enable: true 
+
+# banners
+banners:
+  motd: |
+    ######################################
+    ###                                ###
+    ###  NetDevEnv L3LS Network        ###
+    ###     Dual DC with DCI           ###
+    ###                                ###
+    ######################################
+    EOF
+
+aliases: |
+  alias CVP ping vrf MGMT 198.18.250.50
+  alias M250 ping vrf MGMT 198.18.250.1
+  alias M251 ping vrf MGMT 198.18.251.1
+  alias MAC sh bgp evpn route-type mac-ip
+  alias PRE sh bgp evpn route-type ip-prefix ipv4

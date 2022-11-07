@@ -1,0 +1,119 @@
+---
+all:
+  children:
+    CVP:
+      hosts:
+        cv_ztp:
+          ansible_host: 198.18.250.50
+          ansible_user: root       
+          ansible_password: Arista123!
+        cv_server:
+          ansible_httpapi_host: 198.18.250.50
+          ansible_host: 198.18.250.50
+          ansible_user: cvpadmin
+          ansible_password: Arista123!
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+          # Configuration to get Virtual Env information
+          ansible_python_interpreter: $(which python3)   
+
+# AVD_Fabric - EVPN Fabric running in home lab
+    US_DC:
+      children:
+        SJ_FABRIC:
+          children:
+            SJ_SPINES:
+              vars:
+                type: spine
+              hosts:
+                SJ-SPINE1:
+                  ansible_host: 198.18.251.101
+                SJ-SPINE2:
+                  ansible_host: 198.18.251.102
+            SJ_L3LEAFS:
+              vars:
+                type: l3leaf
+              children:
+                SJ_LEAF1_2:
+                  hosts:
+                    SJ-LEAF1:
+                      ansible_host: 198.18.251.103
+                    SJ-LEAF2:
+                      ansible_host: 198.18.251.104
+                SJ_LEAF3_4:
+                  hosts:
+                    SJ-LEAF3:
+                      ansible_host: 198.18.251.105
+                    SJ-LEAF4:
+                      ansible_host: 198.18.251.105
+                SJ_BL12:
+                  hosts:
+                    SJ-BL1:
+                      ansible_host: 198.18.251.107
+                    SJ-BL2:
+                      ansible_host: 198.18.251.108
+                      
+        AS_FABRIC:
+          children:
+            AS_SPINES:
+              vars:
+                type: spine
+              hosts:
+                AS-SPINE1:
+                  ansible_host: 198.18.252.101
+                AS-SPINE2:
+                  ansible_host: 198.18.252.102
+            AS_L3LEAFS:
+              vars:
+                type: l3leaf
+              children:
+                AS_LEAF1_2:
+                  hosts:
+                    AS-LEAF1:
+                      ansible_host: 198.18.252.103
+                    AS-LEAF2:
+                      ansible_host: 198.18.252.104
+                AS_LEAF3_4:
+                  hosts:
+                    AS-LEAF3:
+                      ansible_host: 198.18.252.105
+                    AS-LEAF4:
+                      ansible_host: 198.18.252.106
+                AS_BL1_2:
+                  hosts:
+                    AS-BL1:
+                      ansible_host: 198.18.252.107
+                    AS-BL2:
+                      ansible_host: 198.18.252.108                      
+ 
+          vars:
+            ansible_connection: httpapi
+            ansible_network_os: eos
+            ansible_user: ansible
+            # should use vault for passwords
+            ansible_ssh_pass: ansible
+            ansible_become: true
+            ansible_become_method: enable
+            ansible_httpapi_use_ssl: true
+            ansible_httpapi_validate_certs: false
+
+        SJ_NETWORKS:
+          children:
+            SJ_L3LEAFS:
+
+        SJ_ENDPOINTS:
+          children:
+            SJ_L3LEAFS:
+            
+        AS_NETWORKS:
+          children:
+            AS_L3LEAFS:
+
+        AS_ENDPOINTS:
+          children:
+            AS_L3LEAFS:
+
+

@@ -1,0 +1,4 @@
+# OOB Management network default gateway.
+mgmt_interface: Management1
+mgmt_interface_vrf: MGMT
+mgmt_gateway: 198.18.251.1

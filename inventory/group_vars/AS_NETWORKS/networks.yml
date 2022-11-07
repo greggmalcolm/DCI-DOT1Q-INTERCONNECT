@@ -1,0 +1,45 @@
+---
+# AVD Tenants Networks
+tenants:
+# PROD Specific Information - VRFs / VLANs
+  PROD:
+    mac_vrf_vni_base: 10000
+    vrfs:
+      PROD:
+        vrf_vni: 10
+        svis:
+          110:
+            name: AS_PROD_110
+            description: VLAN 110 only in AS
+            enabled: true
+            ip_address_virtual: 10.1.110.1/24
+          230:
+            name: SHARED_PROD_L3_230
+            description: VLAN 230 in both DC's
+            enabled: true
+            ip_address_virtual: 10.1.230.1/24
+
+# DEV Specific Information - VRFs / VLANs
+      DEV:
+        vrf_vni: 20
+        svis:
+          120:
+            name: AS_PROD_120
+            description: VLAN 120 only in AS
+            enabled: true
+            ip_address_virtual: 10.10.120.1/24
+          240:
+            name: SHARED_DEV_L3_240
+            description: VLAN 240 in both DC's
+            enabled: true
+            ip_address_virtual: 10.1.240.1/24
+
+    l2vlans:
+      210:
+        name: SHARED_L2_210
+      220:
+        name: SHARED_L2_210
+   
+   
+
+ 
